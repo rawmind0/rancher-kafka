@@ -4,9 +4,9 @@ MAINTAINER Raul Sanchez <rawmind@gmail.com>
 # Set environment
 ENV KAFKA_HOME=/opt/kafka \
     SERVICE_NAME=kafka \
-    SCALA_VERSION 2.11 \
-    KAFKA_VERSION 0.8.2.2
-ENV KAFKA_RELEASE=kafka_"$SCALA_VERSION"-"$KAFKA_VERSION" \
+    SCALA_VERSION=2.11 \
+    KAFKA_VERSION=0.8.2.2
+ENV KAFKA_RELEASE=kafka_"$SCALA_VERSION"-"$KAFKA_VERSION" 
 
 
 # Install and configure kafka
