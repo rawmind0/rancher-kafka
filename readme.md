@@ -1,4 +1,4 @@
-rancher-agent
+rancher-kafka
 ============
 
 rancher-kafka image based in rancher-jvm8
