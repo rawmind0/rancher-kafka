@@ -1,0 +1,13 @@
+[template]
+src = "server.properties.tmpl"
+dest = "/opt/kafka/config/server.properties"
+owner = "root"
+mode = "0644"
+keys = [
+  "/self/container/create_index",
+  "/self/container/primary_ip",
+  "/services/zk/containers",
+  "/containers",
+]
+
+reload_cmd = "/opt/kafka/bin/restart-kafka-server.sh"

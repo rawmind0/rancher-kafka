@@ -1,0 +1,27 @@
+############################# Server Basics #############################
+broker.id={{getv "/self/container/create_index"}}
+############################# Socket Server Settings #############################
+port=9092
+#host.name=localhost
+advertised.host.name={{getv "/self/container/primary_ip"}}
+advertised.port=9092
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+############################# Log Basics #############################
+log.dirs=/opt/kafka/logs
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+############################# Log Flush Policy #############################
+#log.flush.interval.messages=10000
+#log.flush.interval.ms=1000
+############################# Log Retention Policy #############################
+log.retention.hours=168
+#log.retention.bytes=1073741824
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+log.cleaner.enable=true
+zookeeper.connect={{range $i, $e := ls "/services/zk/containers"}}{{if $i}},{{end}}{{ $containerName := getv (printf "/services/zk/containers/%s" $e)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}:2181{{end}}
+zookeeper.connection.timeout.ms=6000
