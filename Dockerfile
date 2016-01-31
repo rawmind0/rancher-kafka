@@ -1,4 +1,4 @@
-FROM rawmind/rancher-jvm8:0.0.1
+FROM rawmind/rancher-jvm8:0.0.2
 MAINTAINER Raul Sanchez <rawmind@gmail.com>
 
 # Set environment
@@ -19,11 +19,13 @@ RUN curl -sS -k http://apache.mirrors.spacedump.net/kafka/"$KAFKA_VERSION"/"$KAF
 ADD confd/*.toml /etc/confd/conf.d/
 ADD confd/*.tmpl /etc/confd/templates/
 
+# Add monit conf for services
+ADD monit/*.conf /etc/monit/conf.d/
+
 # Add start and restart scripts
-ADD restart-kafka-server.sh /opt/kafka/bin/restart-kafka-server.sh
-RUN chmod +x /opt/kafka/bin/restart-kafka-server.sh
+ADD kafka-server-restart.sh /opt/kafka/bin/kafka-server-restart.sh
 ADD start.sh /usr/bin/start.sh
-RUN chmod +x /usr/bin/start.sh
+RUN chmod +x /usr/bin/start.sh /opt/kafka/bin/kafka-server-restart.sh
 
 WORKDIR ${KAFKA_HOME}
 
