@@ -10,4 +10,4 @@ keys = [
   "/containers",
 ]
 
-reload_cmd = "/opt/kafka/bin/restart-kafka-server.sh"
+reload_cmd = "/opt/kafka/bin/kafka-server-restart.sh"

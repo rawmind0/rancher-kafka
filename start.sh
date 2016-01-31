@@ -37,26 +37,33 @@ function rmconf {
 }
 
 CONFD_BACKEND=${CONFD_BACKEND:-"rancher"}
-CONFD_PREFIX=${CONFD_PREFIX:-"/2015-07-25"}
+CONFD_PREFIX=${CONFD_PREFIX:-"/latest"}
 CONFD_INTERVAL=${CONFD_INTERVAL:-60}
-CONFD_RELOAD=${CONFD_RELOAD:-true}
 CONFD_PARAMS=${CONFD_PARAMS:-"-backend ${CONFD_BACKEND} -prefix ${CONFD_PREFIX}"}
-KAFKA_HEAP_OPTS=${KAFKA_HEAP_OPTS:-"-Xmx1G -Xms1G"}
+CONFD_SCRIPT=${CONFD_SCRIPT:-"/tmp/confd-start.sh"}
+KAFKA_HEAP_OPTS=${JVMFLAGS:-"-Xmx1G -Xms1G"}
 
 export CONFD_BACKEND CONFD_PREFIX CONFD_INTERVAL CONFD_PARAMS KAFKA_HEAP_OPTS
    
 checkrancher
 rmconf
 
-if [ "$CONFD_RELOAD" == "true" ]; then
-    taillog
-
+if [ "$CONFD_INTERVAL" -gt "0" ]; then
     CONFD_PARAMS="-interval ${CONFD_INTERVAL} ${CONFD_PARAMS}"
-    confd ${CONFD_PARAMS} 
 else
     CONFD_PARAMS="-onetime ${CONFD_PARAMS}"
-    confd ${CONFD_PARAMS} 
-
-    log "[ Starting kafka service... ]"
-    ${KAFKA_HOME}/bin/kafka-server-start.sh ${KAFKA_HOME}/config/server.properties 
 fi
+
+# Create confd start script
+echo "#!/usr/bin/env sh" > ${CONFD_SCRIPT}
+echo "/usr/bin/nohup /usr/bin/confd ${CONFD_PARAMS} > /opt/kafka/logs/confd.log 2>&1 &" >> ${CONFD_SCRIPT}
+echo "rc=\$?" >> ${CONFD_SCRIPT}
+echo "echo \$rc" >> ${CONFD_SCRIPT}
+chmod 755 ${CONFD_SCRIPT}
+
+# Run confd start script
+${CONFD_SCRIPT}
+
+# Run monit
+/usr/bin/monit -I
+
