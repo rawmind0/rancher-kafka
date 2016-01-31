@@ -23,5 +23,5 @@ log.retention.hours=168
 log.segment.bytes=1073741824
 log.retention.check.interval.ms=300000
 log.cleaner.enable=true
-zookeeper.connect={{range $i, $e := ls "/services/zk/containers"}}{{if $i}},{{end}}{{ $containerName := getv (printf "/services/zk/containers/%s" $e)}}{{getv (printf "/containers/%s/primary_ip" $containerName)}}:2181{{end}}
+zookeeper.connect={{range $i, $e := ls "/services/zk/containers"}}{{if $i}},{{end}}{{getv (printf "/containers/%s/primary_ip" $e)}}:2181{{end}}
 zookeeper.connection.timeout.ms=6000
