@@ -30,12 +30,6 @@ function taillog {
     tail -F ${KAFKA_HOME}/logs/kafkaServer.out &
 }
 
-function rmconf {
-    if [ -f ${KAFKA_HOME}/config/server.properties ]; then
-        rm ${KAFKA_HOME}/config/server.properties
-    fi
-}
-
 CONFD_BACKEND=${CONFD_BACKEND:-"rancher"}
 CONFD_PREFIX=${CONFD_PREFIX:-"/latest"}
 CONFD_INTERVAL=${CONFD_INTERVAL:-60}
@@ -46,7 +40,7 @@ KAFKA_HEAP_OPTS=${JVMFLAGS:-"-Xmx1G -Xms1G"}
 export CONFD_BACKEND CONFD_PREFIX CONFD_INTERVAL CONFD_PARAMS KAFKA_HEAP_OPTS
    
 checkrancher
-rmconf
+taillog
 
 if [ "$CONFD_INTERVAL" -gt "0" ]; then
     CONFD_PARAMS="-interval ${CONFD_INTERVAL} ${CONFD_PARAMS}"
