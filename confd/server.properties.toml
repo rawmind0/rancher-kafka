@@ -4,10 +4,7 @@ dest = "/opt/kafka/config/server.properties"
 owner = "root"
 mode = "0644"
 keys = [
-  "/self/container/create_index",
-  "/self/container/primary_ip",
-  "/services/zk/containers",
-  "/containers",
+  "/self",
 ]
 
 reload_cmd = "/opt/kafka/bin/kafka-server-restart.sh"
