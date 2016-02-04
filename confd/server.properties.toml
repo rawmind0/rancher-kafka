@@ -5,6 +5,7 @@ owner = "root"
 mode = "0644"
 keys = [
   "/self",
+  "/stacks",
 ]
 
 reload_cmd = "/opt/kafka/bin/kafka-server-restart.sh"
