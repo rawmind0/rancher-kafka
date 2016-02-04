@@ -5,9 +5,8 @@ MAINTAINER Raul Sanchez <rawmind@gmail.com>
 ENV KAFKA_HOME=/opt/kafka \
     SERVICE_NAME=kafka \
     SCALA_VERSION=2.11 \
-    KAFKA_VERSION=0.8.2.2
+    KAFKA_VERSION=0.9.0.0
 ENV KAFKA_RELEASE=kafka_"$SCALA_VERSION"-"$KAFKA_VERSION"  
-
 
 # Install and configure kafka
 RUN curl -sS -k http://apache.mirrors.spacedump.net/kafka/"$KAFKA_VERSION"/"$KAFKA_RELEASE".tgz | gunzip -c - | tar -xf - -C /opt \
