@@ -44,11 +44,20 @@ CONFD_ONETIME="/usr/bin/confd -onetime ${CONFD_PARAMS}"
 CONFD_SCRIPT=${CONFD_SCRIPT:-"/tmp/confd-start.sh"}
 ZK_SERVICE=${ZK_SERVICE:-"kafka-zk/zk"}
 KAFKA_HEAP_OPTS=${JVMFLAGS:-"-Xmx1G -Xms1G"}
+KAFKA_ADVERTISE_IP=${KAFKA_ADVERTISE:-"private"}
 
-export CONFD_BACKEND CONFD_PREFIX CONFD_INTERVAL CONFD_PARAMS KAFKA_HEAP_OPTS
+export CONFD_BACKEND CONFD_PREFIX CONFD_INTERVAL CONFD_PARAMS KAFKA_HEAP_OPTS KAFKA_ADVERTISE_IP
    
 checkrancher
 taillog
+
+if [ "$KAFKA_ADVERTISE_IP" -eq "private" ]; then
+    KAFKA_ADVERTISE_URL='advertised.host.name={{getv "/self/container/primary_ip"}}'
+else 
+    KAFKA_ADVERTISE_URL='advertised.host.name={{getv "/self/host/agent_ip"}}'
+fi
+
+sed -i "s|_KAFKA_ADVERTISE_URL|$KAFKA_ADVERTISE_URL|g" /etc/confd/templates/server.properties.tmpl
 
 if [ "$CONFD_INTERVAL" -gt "0" ]; then
     CONFD_PARAMS="-interval ${CONFD_INTERVAL} ${CONFD_PARAMS}"
