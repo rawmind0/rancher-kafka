@@ -1,9 +1,9 @@
 ############################# Server Basics #############################
-broker.id={{getv "/self/container/create_index"}}
+broker.id={{getv "/self/container/service_index"}}
 ############################# Socket Server Settings #############################
 port=9092
 #host.name=localhost
-advertised.host.name={{getv "/self/container/primary_ip"}}
+_KAFKA_ADVERTISE_URL
 advertised.port=9092
 num.network.threads=3
 num.io.threads=8
