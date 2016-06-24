@@ -2,7 +2,7 @@
 
 set -e
 
-export SERVICE_CONF=${SERVICE_CONF:-"/opt/kafka/config/server.properties"}
+export SERVICE_TMPL=${:-"/opt/tools/confd/etc/templates/server.properties.tmpl"}
 
 export KAFKA_HEAP_OPTS=${JVMFLAGS:-"-Xmx1G -Xms1G"}
 export KAFKA_ADVERTISE_PORT=${KAFKA_ADVERTISE_PORT:-"9092"}

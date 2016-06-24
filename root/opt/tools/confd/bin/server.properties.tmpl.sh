@@ -6,7 +6,7 @@ else
 	export KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-'${KAFKA_LISTENER},PLAINTEXT://{{getv "/self/host/agent_ip"}}:${KAFKA_ADVERTISE_PORT}'}
 fi
 
-cat << EOF > ${SERVICE_CONF}
+cat << EOF > ${SERVICE_TMPL}
 ############################# Server Basics #############################
 broker.id={{getv "/self/container/service_index"}}
 ############################# Socket Server Settings #############################
