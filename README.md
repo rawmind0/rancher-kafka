@@ -11,7 +11,7 @@ docker build -t rawmind/rancher-kafka:<version> .
 
 ## Versions
 
-- `0.9.0.1-3` [(Dockerfile)](https://github.com/rawmind0/rancher-kafka/blob/0.9.0.1-3/README.md)
+- `0.9.0.1-5` [(Dockerfile)](https://github.com/rawmind0/rancher-kafka/blob/0.9.0.1-5/README.md)
 
 
 ## Usage
