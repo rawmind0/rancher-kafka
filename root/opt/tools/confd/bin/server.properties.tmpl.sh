@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
 if [ "$ADVERTISE_PUB_IP" -eq "false" ]; then 
-	export KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-"${KAFKA_LISTENER}"}
+	export KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-${KAFKA_LISTENER}}
 else
-	export KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-'${KAFKA_LISTENER},PLAINTEXT://{{getv "/self/host/agent_ip"}}:${KAFKA_ADVERTISE_PORT}'}
+	export KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-${KAFKA_LISTENER}',PLAINTEXT://{{getv "/self/host/agent_ip"}}:${KAFKA_ADVERTISE_PORT}'}
 fi
 
 cat << EOF > ${SERVICE_TMPL}
@@ -31,6 +31,6 @@ log.segment.bytes=1073741824
 log.retention.check.interval.ms=300000
 log.cleaner.enable=true
 ############################# Connect Policy #############################{{ \$zk_link := split (getenv "ZK_SERVICE") "/" }}{{\$zk_stack := index \$zk_link 0}}{{ \$zk_service := index \$zk_link 1}} 
-zookeeper.connect={{range \$i, \$e := ls (printf "/stacks/%s/services/%s/containers" \$zk_stack \$zk_service)}}{{if \$i}},{{end}}{{getv (printf "/stacks/%s/services/%s/containers/%s/primary_ip" \$zk_stack \$zk_service $e)}}:2181{{end}}
+zookeeper.connect={{range \$i, \$e := ls (printf "/stacks/%s/services/%s/containers" \$zk_stack \$zk_service)}}{{if \$i}},{{end}}{{getv (printf "/stacks/%s/services/%s/containers/%s/primary_ip" \$zk_stack \$zk_service \$e)}}:2181{{end}}
 zookeeper.connection.timeout.ms=6000
 EOF
