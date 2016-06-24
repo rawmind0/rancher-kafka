@@ -2,6 +2,17 @@
 
 set -e
 
+export SERVICE_CONF=${SERVICE_CONF:-"/opt/kafka/config/server.properties"}
+
+export KAFKA_HEAP_OPTS=${JVMFLAGS:-"-Xmx1G -Xms1G"}
+export KAFKA_ADVERTISE_PORT=${KAFKA_ADVERTISE_PORT:-"9092"}
+export KAFKA_LISTENER=${KAFKA_LISTENER:-"PLAINTEXT://0.0.0.0:${KAFKA_ADVERTISE_PORT}"}
+export KAFKA_LOG_DIRS=${KAFKA_LOG_DIRS:-"${SERVICE_HOME}/logs"}
+export KAFKA_LOG_FILE=${KAFKA_LOG_FILE:-"${KAFKA_LOG_DIRS}/kafkaServer.out"}
+export KAFKA_LOG_RETENTION_HOURS=${KAFKA_LOG_RETENTION_HOURS:-"168"}
+export KAFKA_NUM_PARTITIONS=${KAFKA_NUM_PARTITIONS:-"1"}
+export KAFKA_EXT_IP=${KAFKA_EXT_IP:-""}
+
 function log {
         echo `date` $ME - $@ >> ${CONF_LOG}
 }
