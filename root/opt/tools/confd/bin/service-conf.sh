@@ -26,14 +26,14 @@ function checkNetwork {
 
 function serviceTemplate {
     log "[ Checking ${CONF_NAME} template... ]"
-    sh ${CONF_HOME}/bin/server.properties.tmpl.sh
+    bash ${CONF_HOME}/bin/gen.conf.tmpl.sh
 }
 
 function serviceStart {
     checkNetwork
     serviceTemplate
     log "[ Starting ${CONF_NAME}... ]"
-    /usr/bin/nohup ${CONF_INTERVAL} > ${CONF_HOME}/log/confd.log 2>&1 &
+    /usr/bin/nohup ${CONF_INTERVAL} &> ${CONF_HOME}/log/confd.log &
 }
 
 function serviceStop {
