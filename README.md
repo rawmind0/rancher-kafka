@@ -1,3 +1,5 @@
+[![](https://images.microbadger.com/badges/image/rawmind/rancher-kafka.svg)](https://microbadger.com/images/rawmind/rancher-kafka "Get your own image badge on microbadger.com")
+
 rancher-kafka
 ==============
 
