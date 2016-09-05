@@ -11,15 +11,12 @@ KAFKA_NUM_PARTITIONS=${KAFKA_NUM_PARTITIONS:-"1"}
 KAFKA_ZK_PORT=${KAFKA_ZK_PORT:-"2181"}
 KAFKA_EXT_IP=${KAFKA_EXT_IP:-""}
 
-if [ "$ADVERTISE_PUB_IP" == "true" ]; then 
-	KAFKA_EXT_IP='PLAINTEXT://{{getv "/self/host/agent_ip"}}'
-fi
-
-if [ "$KAFKA_EXT_IP" == "" ]; then
- 	KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-${KAFKA_LISTENER}}
+if [ "$ADVERTISE_PUB_IP" == "true" ]; then
+    KAFKA_ADVERTISE_IP='{{getv "/self/host/agent_ip"}}'
 else
-	KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-"PLAINTEXT://"${KAFKA_EXT_IP}":"${KAFKA_ADVERTISE_PORT}}
+    KAFKA_ADVERTISE_IP='{{getv "/self/container/primary_ip"}}'
 fi
+KAFKA_ADVERTISE_LISTENER=${KAFKA_ADVERTISE_LISTENER:-"PLAINTEXT://"${KAFKA_ADVERTISE_IP}":"${KAFKA_ADVERTISE_PORT}}
 
 cat << EOF > ${SERVICE_VOLUME}/confd/etc/conf.d/server.properties.toml
 [template]
