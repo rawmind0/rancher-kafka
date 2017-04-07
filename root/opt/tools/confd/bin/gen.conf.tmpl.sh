@@ -10,6 +10,10 @@ KAFKA_LOG_RETENTION_HOURS=${KAFKA_LOG_RETENTION_HOURS:-"168"}
 KAFKA_NUM_PARTITIONS=${KAFKA_NUM_PARTITIONS:-"1"}
 KAFKA_ZK_PORT=${KAFKA_ZK_PORT:-"2181"}
 KAFKA_EXT_IP=${KAFKA_EXT_IP:-""}
+KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR:-"3"}
+
+# Make kafka rack aware using the availability-zone label in rancher
+KAFKA_BROKER_RACK={{getv "/self/host/labels/az"}}
 
 if [ "$ADVERTISE_PUB_IP" == "true" ]; then
     KAFKA_ADVERTISE_IP='{{getv "/self/host/agent_ip"}}'
@@ -35,6 +39,9 @@ EOF
 cat << EOF > ${SERVICE_VOLUME}/confd/etc/templates/server.properties.tmpl
 ############################# Server Basics #############################
 broker.id={{getv "/self/container/service_index"}}
+############################# Replication Settings #############################
+broker.rack=${KAFKA_BROKER_RACK}
+offsets.topic.replication.factor=${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
 ############################# Socket Server Settings #############################
 listeners=${KAFKA_LISTENER}
 advertised.listeners=${KAFKA_ADVERTISE_LISTENER}
