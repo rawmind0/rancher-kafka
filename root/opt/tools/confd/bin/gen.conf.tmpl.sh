@@ -7,6 +7,7 @@ KAFKA_LISTENER=${KAFKA_LISTENER:-"PLAINTEXT://0.0.0.0:"${KAFKA_ADVERTISE_PORT}}
 KAFKA_LOG_DIRS=${KAFKA_LOG_DIRS:-${SERVICE_HOME}"/logs"}
 KAFKA_LOG_FILE=${KAFKA_LOG_FILE:-${KAFKA_LOG_DIRS}"/kafkaServer.out"}
 KAFKA_LOG_RETENTION_HOURS=${KAFKA_LOG_RETENTION_HOURS:-"168"}
+KAFKA_OFFSET_RETENTION_MINUTES=${KAFKA_OFFSET_RETENTION_MINUTES:-"1440"}
 KAFKA_NUM_PARTITIONS=${KAFKA_NUM_PARTITIONS:-"1"}
 KAFKA_ZK_PORT=${KAFKA_ZK_PORT:-"2181"}
 KAFKA_EXT_IP=${KAFKA_EXT_IP:-""}
@@ -57,6 +58,8 @@ log.retention.hours=${KAFKA_LOG_RETENTION_HOURS}
 log.segment.bytes=1073741824
 log.retention.check.interval.ms=300000
 log.cleaner.enable=true
+############################# Offset Retention #############################
+offset.retention.minutes=${KAFKA_OFFSET_RETENTION_MINUTES}
 ############################# Connect Policy #############################{{ \$zk_link := split (getenv "ZK_SERVICE") "/" }}{{\$zk_stack := index \$zk_link 0}}{{ \$zk_service := index \$zk_link 1}} 
 zookeeper.connect={{range \$i, \$e := ls (printf "/stacks/%s/services/%s/containers" \$zk_stack \$zk_service)}}{{if \$i}},{{end}}{{getv (printf "/stacks/%s/services/%s/containers/%s/primary_ip" \$zk_stack \$zk_service \$e)}}:${KAFKA_ZK_PORT}{{end}}
 zookeeper.connection.timeout.ms=6000
