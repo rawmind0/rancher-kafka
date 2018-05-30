@@ -64,7 +64,7 @@ log.segment.bytes=1073741824
 log.retention.check.interval.ms=300000
 log.cleaner.enable=true
 ############################# Offset Retention #############################
-offset.retention.minutes=${KAFKA_OFFSET_RETENTION_MINUTES}
+offsets.retention.minutes=${KAFKA_OFFSET_RETENTION_MINUTES}
 ############################# Connect Policy #############################{{ \$zk_link := split (getenv "ZK_SERVICE") "/" }}{{\$zk_stack := index \$zk_link 0}}{{ \$zk_service := index \$zk_link 1}} 
 zookeeper.connect={{range \$i, \$e := ls (printf "/stacks/%s/services/%s/containers" \$zk_stack \$zk_service)}}{{if \$i}},{{end}}{{getv (printf "/stacks/%s/services/%s/containers/%s/primary_ip" \$zk_stack \$zk_service \$e)}}:${KAFKA_ZK_PORT}{{end}}
 zookeeper.connection.timeout.ms=6000
