@@ -36,9 +36,23 @@ keys = [
 reload_cmd = "${SERVICE_HOME}/bin/kafka-service.sh restart"
 EOF
 
+[ -e ${KAFKA_LOG_DIRS}/meta.properties ] && {
+   BROKER_ID=$(grep ^broker.id ${KAFKA_LOG_DIRS}/meta.properties|awk -F= '{print $2}');
+}
+
+[ -z "${BROKER_ID}" ] && {
 cat << EOF > ${SERVICE_VOLUME}/confd/etc/templates/server.properties.tmpl
 ############################# Server Basics #############################
 broker.id={{getv "/self/container/service_index"}}
+EOF
+} || {
+cat << EOF > ${SERVICE_VOLUME}/confd/etc/templates/server.properties.tmpl
+############################# Server Basics #############################
+broker.id=${BROKER_ID}
+EOF
+}
+
+cat << EOF >> ${SERVICE_VOLUME}/confd/etc/templates/server.properties.tmpl
 ############################# Socket Server Settings #############################
 listeners=${KAFKA_LISTENER}
 advertised.listeners=${KAFKA_ADVERTISE_LISTENER}
